@@ -1,0 +1,9 @@
+sudo apt-get update
+sudo apt install docker.io
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.debcurl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+sudo dpkg -i minikube_latest_amd64.deb
+sudo chmod 777 /var/run/docker.sock
+minikube start
+sudo snap install kubectl --classic
+minikube status
+minikube addons enable ingress
