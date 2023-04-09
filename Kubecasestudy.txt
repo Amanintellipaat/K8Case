@@ -1,0 +1,132 @@
+Image : https://prnt.sc/75ktTYvhPxCJ
+
+Commands 
+
+  1  clear
+    2  sudo apt update
+    3  clear
+    4  sudo apt install docker.io
+    5  which docker
+    6  docker --version
+    7  clear
+    8  ls
+    9  curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.debcurl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+   10  ls
+   11  sudo dpkg -i minikube_latest_amd64.deb
+   12  sudo chmod 777 /var/run/docker.sock
+   13  minikube start
+   14  kubectl get po -A
+   15  sudo snap install kubectl --classic
+   16  kubectl get po -A
+   17  clear
+   18  minikube status
+   19  history 
+   20  clear
+   21  docker --version
+   22  minikube status
+   23  clear
+   24  git clone https://github.com/hshar/website.git
+   25  ls
+   26  cd website/
+   27  ls
+   28  cat index.html
+   29  cd images/
+   30  ls
+   31  cd ..
+   32  clear
+   33  ls
+   34  sudo nano Dockerfile
+   35  sudo docker build . -t k8csimage
+   36  clear
+   37  sudo docker images
+   38  history
+    39  sudo docker run -itd k8csimage
+   40  sudo docker exec -it 783a85332840adc3a6ab750a3f304799b1a6138ae6fc2914576895c0ab105839 bash
+   41  clear
+   42  sudo docker ps
+   43  sudo docker rm -f 783a85332840
+   44  sudo docker ps
+   45  sudo docker ps -a
+   46  clear
+   47  clear
+   48  sudo docker login
+   49  sudo docker images
+   50  sudo docker tag k8csimage:latest amanintellipaat/k8csimage:latest
+   51  sudo docker images
+   52  sudo docker push amanintellipaat/k8csimage
+   53  clear
+   54  minikube addons enable ingress
+   55  kubectl create deployment apache2 --image=ubuntu/apache2 --port=80
+   56  kubectl get deploy
+   57  kubect get svc
+   58  kubectl get svc
+   59  kubectl expose deploy apache2 --type NodePort
+   60  kubectl get svc
+   61  clear
+   62  sudo nano ingress.yaml
+   63  history
+   64  sudo nano ingress.yaml
+   65  kubectl apply -f ingress.yaml
+   66  kubectl svc -o wide
+   67  kubectl get svc -o wide
+   68  clear
+   69  kubectl port-forward service/ingress-nginx-controller -n ingress-nginx --address 0.0.0.0 :443
+   70  sudo nano ingress.yaml
+   71  kubectl get ing
+   72  kubect get deploy
+   73  kubectl get deploy
+   74  kubectl get svc
+   75  sudo nano ingress.yaml
+   76  kubectl apply -f ingress.yaml
+   77  kubectl port-forward service/ingress-nginx-controller -n ingress-nginx --address 0.0.0.0 :443
+   78  kubectl create deployment customimg --image=amanintellipaat/k8csimage --port=80
+   79  kubectl expose deploy customimg --type NodePort
+   80  kubectl get deploy
+   81  kubectl get svc
+   82  sudo nano ingress.yaml
+   83  kubectl apply -f ingress.yaml
+   84  kubectl port-forward service/ingress-nginx-controller -n ingress-nginx --address 0.0.0.0 :443
+   85  clear
+   86  history
+
+
+
+---------- Docker file ----------------
+
+FROM ubuntu
+RUN apt-get update
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
+RUN apt-get -y install apache2
+ADD . /var/www/html/
+ENTRYPOINT apachectl -D FOREGROUND
+
+
+----------------- ingress.yaml-------------------
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /apache
+        pathType: Prefix
+        backend:
+          service:
+            name: apache2
+            port:
+              number: 80
+      - path: /custom
+        pathType: Prefix
+        backend:
+          service:
+            name: customimg
+            port:
+              number: 80
+
+
